@@ -16,9 +16,10 @@ class Author(models.Model):
     rating = models.IntegerField(default=0)
 
     def update_rating(self):
-        self.rating = self.post.rating * 3 + self.comment.rating + self.post.comment.rating
+        self.rating = Post.objects.get(author=self).rating * 3 +@@@@ self.comment.rating + self.post.comment.rating
         self.save()
 
+# Comment.objects.filter(user_id=Mike_aut.user.id)
 
 class Category(models.Model):
     name = models.CharField(max_length=30, unique=True)
