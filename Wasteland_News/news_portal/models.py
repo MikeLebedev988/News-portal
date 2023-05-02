@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Sum
 
 article = 'AR'
 news = 'NE'
@@ -16,10 +17,22 @@ class Author(models.Model):
     rating = models.IntegerField(default=0)
 
     def update_rating(self):
-        self.rating = Post.objects.get(author=self).rating * 3 +@@@@ self.comment.rating + self.post.comment.rating
+# Суммарный рейтинг каждой статьи автора умножается на 3.
+        a = self.post_set.aggregate(post_rating=Sum('rating'))
+        res_sum = 0
+        res_sum += a.get('post_rating') * 3
+# Суммарный рейтинг всех комментариев автора.
+        b = self.user.comment_set.aggregate(comment_rating=Sum('rating'))
+        res_sum2 = 0
+        res_sum2 += b.get('comment_rating')
+# Суммарный рейтинг всех комментариев к статьям автора.
+        res_sum3 = 0
+        count = self.post_set.all().count()
+        for i in range(count):
+            res_sum3 += self.post_set.all()[i].rating
+# Итого:
+        self.rating = res_sum + res_sum2 + res_sum3
         self.save()
-
-# Comment.objects.filter(user_id=Mike_aut.user.id)
 
 class Category(models.Model):
     name = models.CharField(max_length=30, unique=True)
@@ -53,7 +66,7 @@ class PostCategory(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
     date_time = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
@@ -65,4 +78,3 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
-
