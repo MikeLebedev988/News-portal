@@ -27,9 +27,11 @@ class Author(models.Model):
         res_sum2 += b.get('comment_rating')
 # Суммарный рейтинг всех комментариев к статьям автора.
         res_sum3 = 0
-        count = self.post_set.all().count()
-        for i in range(count):
-            res_sum3 += self.post_set.all()[i].rating
+        count_posts = self.post_set.all().count()
+        for i in range(count_posts):
+            count_comments = self.post_set.all()[i].comment_set.all().count()
+            for z in range(count_comments):
+                res_sum3 += self.post_set.all()[i].comment_set.all()[z].rating
 # Итого:
         self.rating = res_sum + res_sum2 + res_sum3
         self.save()
