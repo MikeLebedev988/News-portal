@@ -1,4 +1,5 @@
 # News-portal
+Code for python shell.
 
 from news_portal.models import *
 
