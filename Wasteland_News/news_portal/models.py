@@ -18,7 +18,8 @@ def best_author():
 
 def best_post():
     best_post = Post.objects.order_by("-rating")[0]
-    print(f"Date_time: {best_post.date_time}"
+    print(f"Best post:"
+          f"\nDate_time: {best_post.date_time}"
           f"\nUsername: {best_post.author.user.username}"
           f"\nRating: {best_post.rating}"
           f"\nTitle: {best_post.title}"
@@ -56,7 +57,8 @@ def all_comments():
     best_post = Post.objects.order_by("-rating")[0]
     comments_count = best_post.comment_set.all().count()
     for i in range(comments_count):
-        print(f"Date_time: {best_post.comment_set.all()[i].date_time}"
+        print(f"Best comment:"
+              f"\nDate_time: {best_post.comment_set.all()[i].date_time}"
               f"\nUsername: {best_post.comment_set.all()[i].user}"
               f"\nrating: {best_post.comment_set.all()[i].rating}"
               f"\nComment: {best_post.comment_set.all()[i].text}"
