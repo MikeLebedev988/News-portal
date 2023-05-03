@@ -71,7 +71,7 @@ Comment.objects.all()[2].like()
 for _ in range(9):
     Comment.objects.all()[3].like()
 
-for _ in range(15)
+for _ in range(15):
     Comment.objects.all()[4].like()
 
 best_author()
