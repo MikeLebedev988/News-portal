@@ -1,15 +1,15 @@
 from django.test import TestCase
 
 # Create your tests here.
-manage.py shell
-from django.contrib.auth.models import User
 from news_portal.models import *
 
 
 User.objects.create_user("Mike")
 User.objects.create_user("Nick")
+User.objects.create_user("Courier")
 Mike = User.objects.all()[0]
 Nick = User.objects.all()[1]
+Courier = User.objects.all()[2]
 
 
 Author.objects.create(user=Mike)
@@ -45,57 +45,36 @@ Comment.objects.create(post=art1, user=Mike, text='Спасибо за инфу!
 Comment.objects.create(post=art2, user=Mike, text='Класс! Продолжай в том же духе!')
 Comment.objects.create(post=art2, user=Nick, text='Спасибо. Буду стараться!')
 Comment.objects.create(post=news1, user=Nick, text='lol!)')
+Comment.objects.create(post=news1, user=Courier, text="I'll make them dance!")
 
-news1.like()
-news1.like()
-news1.like()
-news1.like()
-news1.like()
+for _ in range(7):
+    news1.like()
+
 news1.dislike()
-news1.like()
-news1.like()
 
-art1.like()
-art1.like()
-art1.like()
-art1.like()
+for _ in range(4):
+    art1.like()
+
 art1.dislike()
 
-art2.like()
-art2.like()
-art2.like()
+for _ in range(3):
+    art2.like()
+
 art2.dislike()
 
-Comment.objects.all()[0].like()
-Comment.objects.all()[0].like()
-Comment.objects.all()[0].like()
-Comment.objects.all()[0].like()
+for _ in range(4):
+    Comment.objects.all()[0].like()
 
 Comment.objects.all()[1].like()
 
 Comment.objects.all()[2].like()
 
-Comment.objects.all()[3].like()
-Comment.objects.all()[3].like()
-Comment.objects.all()[3].like()
-Comment.objects.all()[3].like()
-Comment.objects.all()[3].like()
-Comment.objects.all()[3].like()
-Comment.objects.all()[3].like()
-Comment.objects.all()[3].like()
-Comment.objects.all()[3].like()
+for _ in range(9):
+    Comment.objects.all()[3].like()
 
-best_user = Author.objects.order_by("-rating")
-print(f'Best User is {best_user[0].user.username} with {best_user[0].rating} rating points.')
+for _ in range(15):
+    Comment.objects.all()[4].like()
 
-best_post = Post.objects.order_by("-rating")[0]
-best_post.date_time
-best_post.author.user.username
-best_post.rating
-best_post.title
-best_post.preview()
-
-User.objects.create_user("Courier")
-Courier = User.objects.all()[2]
-Comment.objects.create(post=news1, user=Courier, text="I'll make them dance!")
-Comment.objects.all()[4].like()*15
+best_author()
+best_post()
+all_comments()
