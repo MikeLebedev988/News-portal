@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Max
 
 article = 'AR'
 news = 'NE'
@@ -17,16 +17,14 @@ class Author(models.Model):
     rating = models.IntegerField(default=0)
 
     def update_rating(self):
+        res_sum = res_sum2 = res_sum3 = 0
 # Суммарный рейтинг каждой статьи автора умножается на 3.
         a = self.post_set.aggregate(post_rating=Sum('rating'))
-        res_sum = 0
         res_sum += a.get('post_rating') * 3
 # Суммарный рейтинг всех комментариев автора.
         b = self.user.comment_set.aggregate(comment_rating=Sum('rating'))
-        res_sum2 = 0
         res_sum2 += b.get('comment_rating')
 # Суммарный рейтинг всех комментариев к статьям автора.
-        res_sum3 = 0
         count_posts = self.post_set.all().count()
         for i in range(count_posts):
             count_comments = self.post_set.all()[i].comment_set.all().count()
@@ -35,6 +33,7 @@ class Author(models.Model):
 # Итого:
         self.rating = res_sum + res_sum2 + res_sum3
         self.save()
+
 
 class Category(models.Model):
     name = models.CharField(max_length=30, unique=True)
@@ -59,6 +58,15 @@ class Post(models.Model):
 
     def preview(self):
         return f"{self.text[:123]}..."
+
+    def all_comments(self):
+        best_post = Post.objects.order_by("-rating")[0]
+        comments_count = best_post.comment_set.all().count()
+        for i in range(comments_count):
+            best_post.comment_set.all()[i].date_time
+            best_post.comment_set.all()[i].user
+            best_post.comment_set.all()[i].rating
+            best_post.comment_set.all()[i].text
 
 
 class PostCategory(models.Model):

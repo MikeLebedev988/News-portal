@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 # Create your tests here.
@@ -11,6 +10,7 @@ User.objects.create_user("Mike")
 User.objects.create_user("Nick")
 Mike = User.objects.all()[0]
 Nick = User.objects.all()[1]
+
 
 Author.objects.create(user=Mike)
 Author.objects.create(user=Nick)
@@ -85,5 +85,17 @@ Comment.objects.all()[3].like()
 Comment.objects.all()[3].like()
 Comment.objects.all()[3].like()
 
+best_user = Author.objects.order_by("-rating")
+print(f'Best User is {best_user[0].user.username} with {best_user[0].rating} rating points.')
 
-Comment.objects.all()[0].post.author.user
+best_post = Post.objects.order_by("-rating")[0]
+best_post.date_time
+best_post.author.user.username
+best_post.rating
+best_post.title
+best_post.preview()
+
+User.objects.create_user("Courier")
+Courier = User.objects.all()[2]
+Comment.objects.create(post=news1, user=Courier, text="I'll make them dance!")
+Comment.objects.all()[4].like()*15
