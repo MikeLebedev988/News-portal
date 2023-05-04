@@ -3,7 +3,7 @@ from django.test import TestCase
 # Create your tests here.
 from news_portal.models import *
 
-
+# Создать двух пользователей (с помощью метода User.objects.create_user('username')).
 User.objects.create_user("Mike")
 User.objects.create_user("Nick")
 User.objects.create_user("Courier")
@@ -11,17 +11,19 @@ Mike = User.objects.all()[0]
 Nick = User.objects.all()[1]
 Courier = User.objects.all()[2]
 
-
+# Создать два объекта модели Author, связанные с пользователями.
 Author.objects.create(user=Mike)
 Author.objects.create(user=Nick)
 Mike_aut = Author.objects.all()[0]
 Nick_aut = Author.objects.all()[1]
 
+# Добавить 4 категории в модель Category.
 Category.objects.create(name='Politics')
 Category.objects.create(name='Sport')
 Category.objects.create(name='Wasteland')
 Category.objects.create(name='Humor')
-#
+
+# Добавить 2 статьи и 1 новость.
 Post.objects.create(author=Mike_aut, choise='NE', title='Courier', text='Курьер, которого нашли с выстрелом в голову возле'
                                                                       ' Гудспрингс, как сообщается, пришел в сознание и даже'
                                                                       'полностью выздоровел. Курьер на которого действительно'
@@ -36,17 +38,20 @@ news1 = Post.objects.all()[0]
 art1 = Post.objects.all()[1]
 art2 = Post.objects.all()[2]
 
+# Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий).
 news1.category.add(Category.objects.all()[2])
 news1.category.add(Category.objects.all()[3])
 art1.category.add(Category.objects.all()[0])
 art2.category.add(Category.objects.all()[0])
 
+# Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий).
 Comment.objects.create(post=art1, user=Mike, text='Спасибо за инфу!')
 Comment.objects.create(post=art2, user=Mike, text='Класс! Продолжай в том же духе!')
 Comment.objects.create(post=art2, user=Nick, text='Спасибо. Буду стараться!')
 Comment.objects.create(post=news1, user=Nick, text='lol!)')
 Comment.objects.create(post=news1, user=Courier, text="I'll make them dance!")
 
+# Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов.
 for _ in range(7):
     news1.like()
 
@@ -75,6 +80,15 @@ for _ in range(9):
 for _ in range(15):
     Comment.objects.all()[4].like()
 
+# Обновить рейтинги пользователей.
+Mike_aut.update_rating()
+Nick_aut.update_rating()
+
+# Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта).
 best_author()
+
+# Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках к этой статье.
 best_post()
+
+# Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
 all_comments()
