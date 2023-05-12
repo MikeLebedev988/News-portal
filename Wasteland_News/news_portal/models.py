@@ -16,6 +16,7 @@ def best_author():
     best_author = Author.objects.order_by("-rating")
     print(f'Best Author is {best_author[0].user.username} with {best_author[0].rating} rating points.')
 
+
 def best_post():
     best_post = Post.objects.order_by("-rating")[0]
     print(f"Best post:"
@@ -33,25 +34,28 @@ class Author(models.Model):
 
     def update_rating(self):
         res_sum = res_sum2 = res_sum3 = 0
-# Суммарный рейтинг каждой статьи автора умножается на 3.
+        # Суммарный рейтинг каждой статьи автора умножается на 3.
         a = self.post_set.aggregate(post_rating=Sum('rating'))
         res_sum += a.get('post_rating') * 3
-# Суммарный рейтинг всех комментариев автора.
+        # Суммарный рейтинг всех комментариев автора.
         b = self.user.comment_set.aggregate(comment_rating=Sum('rating'))
         res_sum2 += b.get('comment_rating')
-# Суммарный рейтинг всех комментариев к статьям автора.
+        # Суммарный рейтинг всех комментариев к статьям автора.
         count_posts = self.post_set.all().count()
         for i in range(count_posts):
             count_comments = self.post_set.all()[i].comment_set.all().count()
             for z in range(count_comments):
                 res_sum3 += self.post_set.all()[i].comment_set.all()[z].rating
-# Итого:
+        # Итого:
         self.rating = res_sum + res_sum2 + res_sum3
         self.save()
 
 
 class Category(models.Model):
     name = models.CharField(max_length=30, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 def all_comments():
@@ -86,10 +90,17 @@ class Post(models.Model):
     def preview(self):
         return f"{self.text[:123]}..."
 
+    def __str__(self):
+        return f"{self.title}: {self.preview()}"
+
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        to='Category',
+        on_delete=models.CASCADE,
+        related_name='posts'
+    )
 
 
 class Comment(models.Model):
