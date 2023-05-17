@@ -5,6 +5,25 @@ Posts
 {% endblock title %}
 
 {% block content %}
-<h1> All news</h1>
-{{ posts }}
+    <h1> All news</h1>
+    <h3> {{length}}</h3>
+           <hr>
+        {% if posts %}
+            <table>
+                <tr>
+                    <td><h2>Заголовок</h2></td>
+                    <td><h2>Дата публикации</h2></td>
+                    <td><h2>Описание</h2></td>
+                </tr>
+                {% for post in posts %}
+                    <tr>
+                        <td>{{post.title}}</td>
+                        <td>{{post.date_time|date:'d.m.Y'}}</td>
+                        <td>{{post.text|truncatewords:21}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h2>News is out.</h2>
+        {% endif %}
 {% endblock content %}

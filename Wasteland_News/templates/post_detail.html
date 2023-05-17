@@ -2,10 +2,24 @@
 
 <!-- Название у нас будет Product -->
 {% block title %}
-Post
+Post_detail
 {% endblock title %}
 
 <!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
 {% block content %}
-<h1>{{ post }}</h1>
+{% if post_detail %}
+    <table>
+        <tr>
+            <td><h2>Заголовок</h2></td>
+            <td><h2>Дата публикации</h2></td>
+            <td><h2>Текст</h2></td>
+        <tr>
+            <td>{{post_detail.title}}</td>
+            <td>{{post_detail.date_time|date:'d.m.Y'}}</td>
+            <td>{{post_detail.text}}</td>
+        </tr>
+    </table>
+{% else %}
+<h2>Dosvidania!</h2>
+{% endif %}
 {% endblock content %}
