@@ -11,11 +11,11 @@ Post_detail
     <table>
         <tr>
             <td><h2>Заголовок</h2></td>
-            <td><h2>Дата публикации</h2></td>
-            <td><h2>Текст</h2></td>
-        <tr>
-            <td>{{post_detail.title}}</td>
+            <td><h2>{{post_detail.title}}</h2></td>
+            <td>Дата публикации</td>
             <td>{{post_detail.date_time|date:'d.m.Y'}}</td>
+        <tr>
+            <td><h2>Текст</h2></td>
             <td>{{post_detail.text}}</td>
         </tr>
     </table>
