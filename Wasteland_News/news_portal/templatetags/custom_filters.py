@@ -1,10 +1,9 @@
-from django.test import TestCase
+from django import template
 
-# Create your tests here.
-text = 'Полковник Мур поведает игроку, что она хочет убрать мистера Хауса. ' \
-       'Для этого идите в Лаки 38 и поднимитесь на лифте до …'
+register = template.Library()
 
 
+@register.filter()
 def censor(text):
     cens_list = ['голову', 'убрать', 'полковник', 'шар', ]
     text_lower = text.lower()
@@ -19,11 +18,7 @@ def censor(text):
                             if text_lower[i + g] == cens_list[z][x + g]:
                                 count += 1
                                 if count == len(cens_list[z]):
-                                    print(f"text_lower[i] = {text_lower[i]}")
-                                    print(f"i = {i}")
-                                    print(f"count = {count}")
-                                    print(f"text[i+1:i+count] = {text[i+1:i+count]}")
-                                    text = text.replace(text[i+1:i+count], '*'* (count-1))
+                                    text = text.replace(text[i+1:i+count], '*' * (count-1))
                                     count = 0
                             else:
                                 count = 0
@@ -33,5 +28,3 @@ def censor(text):
                 else:
                     count = 0
     return text
-
-print(censor(text))

@@ -9,8 +9,8 @@ from .models import *
 class PostsList(ListView):
     model = Post
     ordering = '-date_time'
-    template_name = 'posts.html'
-    context_object_name = 'posts'
+    template_name = 'news.html'
+    context_object_name = 'news'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
